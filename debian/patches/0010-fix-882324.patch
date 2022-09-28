@@ -1,0 +1,26 @@
+Description: honor "originating" configuration flag, 
+Origin: https://gitlab.com/amavis/amavis/commit/206109d4c21f28dcd2ba3f42a19b7d77e2bbc100.patch
+Date: Wed, 10 Oct 2018 16:34:58 +0200
+Subject: [PATCH] Applied DKIM signing patch (#6)
+Applied-Upstream: Yes
+Last-Update: 2019-04-05
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/amavisd
++++ b/amavisd
+@@ -22829,6 +22829,7 @@
+         }
+         # load policy banks from the 'client_ipaddr_policy' lookup
+         Amavis::load_policy_bank($_,$msginfo) for @bank_names_cl;
++        $msginfo->originating(c('originating'));
+ 
+         $msginfo->client_addr($cl_ip);      # ADDR
+         $msginfo->client_port($cl_port);    # PORT
+@@ -34361,6 +34362,7 @@
+     $sig_ind++;
+   }
+   Amavis::load_policy_bank($_,$msginfo) for @bank_names;
++  $msginfo->originating(c('originating'));
+   $msginfo->dkim_signatures_valid(\@signatures_valid)  if @signatures_valid;
+ # if (ll(5) && $sig_ind > 0) {
+ #   # show which header fields are covered by which signature

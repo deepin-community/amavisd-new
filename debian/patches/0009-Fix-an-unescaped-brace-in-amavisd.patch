@@ -1,0 +1,21 @@
+From: Elimar Riesebieter <riesebie@lxtec.de>
+Date: Fri, 14 Dec 2018 13:04:46 +0100
+Subject: Fix an unescaped brace in amavisd
+
+---
+ amavisd | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/amavisd b/amavisd
+index a2e4d8f..5cc2c31 100755
+--- a/amavisd
++++ b/amavisd
+@@ -28871,7 +28871,7 @@ sub run_av(@) {
+         my $f = $bare_fnames->[$k];  my $multi = 0;
+         if ($one_at_a_time) {  # glob templates may be substrings anywhere
+           local($1);  @query_expanded = @query_template;  # start afresh
+-          s{ ( {} (?: / \* )? | \* ) }
++          s{ ( \{ \} (?: / \* )? | \* ) }
+            { $1 eq '{}'   ? "$tempdir/parts"
+            : $1 eq '{}/*' ? ($multi=1,"$tempdir/parts/$f")
+            : $1 eq '*'    ? ($multi=1,$f)  : $1
